@@ -4,7 +4,8 @@ import { User } from './schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Role } from './enums/role.enum';
+import { Roles } from './enums/user-roles.enum';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,7 @@ export class UsersService {
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
       password: hashedPassword,
-      role: Role.USER,
+      role: Roles.USER,
       // Set other fields here
     });
     const emailduplicate = await this.findByEmail(createdUser.email);
@@ -39,7 +40,19 @@ export class UsersService {
       throw error;
     }
   }
+  async update(userId, updateUserDto: UpdateUserDto): Promise<User | null> {
+    return await this.userModel.findOneAndUpdate(
+      { _id: userId },
+      { status: updateUserDto.status },
+      {
+        new: true,
+      },
+    );
+  }
   async findByEmail(email: string): Promise<User | null> {
     return await this.userModel.findOne({ email });
+  }
+  async findById(_id: string): Promise<User | null> {
+    return await this.userModel.findOne({ _id });
   }
 }

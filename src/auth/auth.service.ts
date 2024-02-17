@@ -3,8 +3,8 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { User } from '../users/schemas/user.schema';
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +35,11 @@ export class AuthService {
       );
 
       if (user && isMatch) {
-        const payload = { email: user.email, id: user._id };
+        const payload = {
+          email: user.email,
+          userId: user._id,
+          role: user.role,
+        };
         const accessToken = await this.getAccessToken(payload);
 
         return {
@@ -57,5 +61,9 @@ export class AuthService {
   async getAccessToken(payload: object) {
     const accessToken = await this.jwtService.sign(payload);
     return accessToken;
+  }
+  validateUserRole(token: string, expectedRole: string): boolean {
+    const decoded: any = jwt.verify(token, 'your_jwt_secret');
+    return decoded.role === expectedRole;
   }
 }
