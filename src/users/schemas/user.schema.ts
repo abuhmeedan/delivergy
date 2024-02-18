@@ -23,6 +23,17 @@ export class User {
 
   @Prop({ type: String, enum: Statuses, default: Statuses.ACTIVE })
   status: Statuses;
+  @Prop({ type: Date, default: Date.now })
+  createdAt: Date;
+
+  @Prop({ type: Date, default: Date.now })
+  updatedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// Pre-save hook to update updatedAt field
+UserSchema.pre('save', function (next) {
+  this.updatedAt = new Date();
+  next();
+});

@@ -2,7 +2,7 @@
 
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { verify } from 'jsonwebtoken'; // Install jwt library: npm install jwt
+import { verify } from 'jsonwebtoken';
 import { jwtConstants } from '../auth/constants';
 
 @Injectable()
@@ -17,8 +17,8 @@ export class RoleGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1];
-    const decoded = verify(token, jwtConstants.secret);
-    const userRole = decoded['role']; // You need to implement a function to extract the role from the JWT
+    const decoded = token ? verify(token, jwtConstants.secret) : {};
+    const userRole = decoded['role'];
 
     return roles.includes(userRole);
   }
