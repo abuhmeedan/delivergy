@@ -10,6 +10,7 @@ import {
   UseGuards,
   Req,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { ShipmentsService } from './shipments.service';
 import { Shipment } from './schemas/shipment.schema';
@@ -19,12 +20,13 @@ import { Roles } from '../users/user-roles.decorator';
 import { RoleGuard } from '../users/user-roles.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('shipments')
+@Controller()
 export class ShipmentsController {
   constructor(private readonly shipmentService: ShipmentsService) {}
+
   @UseGuards(JwtAuthGuard)
-  @Post()
-  @Roles('user')
+  @Post('admin/shipments')
+  @Roles('admin')
   async createShipment(
     @Req() request: Request,
     @Body() createShipmentDto: CreateShipmentDTO,
@@ -40,13 +42,13 @@ export class ShipmentsController {
     }
   }
 
-  @Get()
-  @Roles('user')
+  @Get('admin/shipments')
+  @Roles('admin')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
-  async getAllShipments(@Req() request: Request): Promise<Shipment[]> {
+  async getAllShipments(@Query('userId') userId: string): Promise<Shipment[]> {
     try {
-      return await this.shipmentService.getAll(request['user'].userId);
+      return await this.shipmentService.getAll(userId);
     } catch (error) {
       console.log(error);
 
@@ -57,16 +59,13 @@ export class ShipmentsController {
     }
   }
 
-  @Get(':id')
-  @Roles('user')
+  @Get('admin/shipments/:id')
+  @Roles('admin')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
-  async getShipmentById(
-    @Req() request: Request,
-    @Param('id') id: string,
-  ): Promise<Shipment> {
+  async getShipmentById(@Param('id') id: string): Promise<Shipment> {
     try {
-      return await this.shipmentService.getById(id, request['user'].userId);
+      return await this.shipmentService.getById(id);
     } catch (error) {
       throw new HttpException(
         'Failed to fetch shipment',
@@ -75,21 +74,16 @@ export class ShipmentsController {
     }
   }
 
-  @Patch(':id')
-  @Roles('user')
+  @Patch('admin/shipments/:id')
+  @Roles('admin')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
   async updateShipment(
     @Param('id') id: string,
-    @Req() request: Request,
     @Body() updateShipmentDto: UpdateShipmentDTO,
   ): Promise<Shipment> {
     try {
-      return await this.shipmentService.update(
-        id,
-        request['user'].userId,
-        updateShipmentDto,
-      );
+      return await this.shipmentService.update(id, updateShipmentDto);
     } catch (error) {
       throw new HttpException(
         'Failed to update shipment',
@@ -98,8 +92,8 @@ export class ShipmentsController {
     }
   }
 
-  @Delete(':id')
-  @Roles('user')
+  @Delete('admin/shipments/:id')
+  @Roles('admin')
   @UseGuards(RoleGuard)
   @UseGuards(JwtAuthGuard)
   async deleteShipment(
@@ -107,7 +101,7 @@ export class ShipmentsController {
     @Param('id') id: string,
   ): Promise<Shipment> {
     try {
-      return await this.shipmentService.delete(id, request['user'].userId);
+      return await this.shipmentService.delete(id);
     } catch (error) {
       throw new HttpException(
         'Failed to delete shipment',

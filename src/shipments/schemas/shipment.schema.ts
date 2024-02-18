@@ -16,11 +16,7 @@ export class Shipment {
       postalCode: String,
     },
   })
-  origin: {
-    city: string;
-    country: string;
-    postalCode: string;
-  };
+  origin: object;
 
   @Prop({
     required: true,
@@ -30,28 +26,21 @@ export class Shipment {
       postalCode: String,
     },
   })
-  destination: {
-    city: string;
-    country: string;
-    postalCode: string;
-  };
+  destination: object;
 
   @Prop({
     required: true,
     type: {
-      defaultDeliveryTime: String,
+      deliveryTime: String,
       specialInstructions: String,
-      preferredCarrier: String,
+      vehicleType: String,
     },
   })
-  deliveryPreferences: {
-    deliveryTime: string;
-    specialInstructions: string;
-    vehicleType: string;
-  };
+  deliveryPreferences: object;
 
   @Prop({ type: String, enum: Statuses, default: Statuses.PENDING })
   status: Statuses;
+
   @Prop({ type: Date, default: Date.now })
   createdAt: Date;
 

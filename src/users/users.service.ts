@@ -40,10 +40,7 @@ export class UsersService {
       throw error;
     }
   }
-  async update(
-    userId: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<User | null> {
+  async update(userId, updateUserDto: UpdateUserDto): Promise<User | null> {
     return await this.userModel.findOneAndUpdate(
       { _id: userId },
       { status: updateUserDto.status },

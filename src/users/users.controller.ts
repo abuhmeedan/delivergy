@@ -4,17 +4,17 @@ import { Roles } from './user-roles.decorator';
 import { RoleGuard } from './user-roles.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-@Controller('api')
+@Controller()
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Patch('users/:userId')
-  @Roles('user')
+  @Patch('admin/users/:userId')
+  @Roles('admin')
   @UseGuards(RoleGuard)
   updateStatus(
-    @Param('id') id: string,
+    @Param('userId') userId: string,
     @Body() updateStatusDto: UpdateUserDto,
   ) {
-    return this.usersService.update(id, updateStatusDto);
+    return this.usersService.update(userId, updateStatusDto);
   }
 }

@@ -21,15 +21,15 @@ export class ShipmentsService {
 
   async getAll(userId: string): Promise<Shipment[]> {
     try {
-      return await this.shipmentModel.find({ userId }).exec();
+      return await this.shipmentModel.find(userId ? { userId } : {}).exec();
     } catch (error) {
       throw error;
     }
   }
 
-  async getById(id: string, userId: string): Promise<Shipment> {
+  async getById(id: string): Promise<Shipment> {
     try {
-      return await this.shipmentModel.findOne({ _id: id, userId }).exec();
+      return await this.shipmentModel.findOne({ _id: id }).exec();
     } catch (error) {
       throw error;
     }
@@ -37,23 +37,20 @@ export class ShipmentsService {
 
   async update(
     id: string,
-    userId: string,
     updateShipmentDto: UpdateShipmentDTO,
   ): Promise<Shipment> {
     try {
       return await this.shipmentModel
-        .findOneAndUpdate({ _id: id, userId }, updateShipmentDto, { new: true })
+        .findOneAndUpdate({ _id: id }, updateShipmentDto)
         .exec();
     } catch (error) {
       throw error;
     }
   }
 
-  async delete(id: string, userId: string): Promise<Shipment> {
+  async delete(id: string): Promise<Shipment> {
     try {
-      return await this.shipmentModel
-        .findOneAndDelete({ _id: id, userId })
-        .exec();
+      return await this.shipmentModel.findOneAndDelete({ _id: id }).exec();
     } catch (error) {
       throw error;
     }
