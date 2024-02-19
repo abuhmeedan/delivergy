@@ -21,7 +21,6 @@ export class UsersService {
       lastName: createUserDto.lastName,
       password: hashedPassword,
       role: Roles.USER,
-      // Set other fields here
     });
     const emailduplicate = await this.findByEmail(createdUser.email);
     if (emailduplicate) {
@@ -32,7 +31,7 @@ export class UsersService {
     }
     try {
       const user = await createdUser.save();
-      // Remove password before returning (for safety)
+      // Remove password before returning
       delete user.password;
       return user;
     } catch (error) {

@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { Shipment } from './schemas/shipment.schema';
 import { CreateShipmentDTO } from './dto/create-shipment.dto';
 import { UpdateShipmentDTO } from './dto/update-shipment.dto';
-
 import { Kafka, Producer } from 'kafkajs';
 
 @Injectable()

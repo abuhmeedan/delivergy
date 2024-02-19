@@ -1,22 +1,10 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  HttpException,
-  HttpStatus,
-  UseGuards,
-  Req,
-  Patch,
-  Query,
-} from '@nestjs/common';
+import { Get, Post, Patch, Body, Param, Delete, Req } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus } from '@nestjs/common';
+import { UseGuards, Query } from '@nestjs/common';
 import { ShipmentsService } from './shipments.service';
 import { Shipment } from './schemas/shipment.schema';
 import { CreateShipmentDTO } from './dto/create-shipment.dto';
 import { UpdateShipmentDTO } from './dto/update-shipment.dto';
-
 import { Roles } from '../users/user-roles.decorator';
 import { RoleGuard } from '../users/user-roles.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';

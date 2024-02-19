@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -13,14 +12,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByEmail(username);
-    if (user && user.password === pass) {
-      const { ...result } = user;
-      return result;
-    }
-    return null;
-  }
   async login(
     loginUserDto: LoginUserDto,
   ): Promise<{ accessToken: string; user: object }> {
@@ -64,9 +55,5 @@ export class AuthService {
   async getAccessToken(payload: object) {
     const accessToken = await this.jwtService.sign(payload);
     return accessToken;
-  }
-  validateUserRole(token: string, expectedRole: string): boolean {
-    const decoded: any = jwt.verify(token, 'your_jwt_secret');
-    return decoded.role === expectedRole;
   }
 }

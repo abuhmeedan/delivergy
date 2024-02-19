@@ -1,4 +1,3 @@
-// jwt-auth.guard.ts
 import {
   Injectable,
   UnauthorizedException,
