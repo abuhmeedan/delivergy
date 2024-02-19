@@ -1,8 +1,8 @@
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-import { AuthService } from './auth/auth.service';
-import { Roles } from './users/user-roles.decorator';
-import { RoleGuard } from './users/user-roles.guard';
+import { AuthService } from '../auth/auth.service';
+import { Roles } from '../users/user-roles.decorator';
+import { RoleGuard } from '../users/user-roles.guard';
 
 @Controller()
 export class AppController {
