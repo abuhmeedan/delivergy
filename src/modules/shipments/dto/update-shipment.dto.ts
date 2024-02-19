@@ -31,4 +31,6 @@ export class UpdateShipmentDTO {
     latitude: number;
     longitude: number;
   };
+
+  readonly feedback: string;
 }

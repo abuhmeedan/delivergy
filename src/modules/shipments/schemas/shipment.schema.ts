@@ -46,6 +46,9 @@ export class Shipment {
   })
   deliveryPreferences: object;
 
+  @Prop()
+  feedback: string;
+
   @Prop({ type: String, enum: Statuses, default: Statuses.PENDING })
   status: Statuses;
 

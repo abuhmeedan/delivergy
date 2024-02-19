@@ -49,7 +49,10 @@ export class AuthService {
       }
     }
 
-    throw new UnauthorizedException({ message: 'invalid email or password' });
+    throw new UnauthorizedException({
+      code: 401,
+      message: 'invalid email or password',
+    });
   }
 
   async signup(
