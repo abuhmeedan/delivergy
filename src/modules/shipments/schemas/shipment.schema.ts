@@ -29,6 +29,14 @@ export class Shipment {
   destination: object;
 
   @Prop({
+    type: {
+      latitude: Number,
+      longitude: Number,
+    },
+  })
+  location: object;
+
+  @Prop({
     required: true,
     type: {
       deliveryTime: String,

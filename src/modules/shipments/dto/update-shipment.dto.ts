@@ -24,4 +24,11 @@ export class UpdateShipmentDTO {
     specialInstructions: string;
     vehicleType: string;
   };
+
+  @IsOptional()
+  @IsObject()
+  readonly location: {
+    latitude: number;
+    longitude: number;
+  };
 }

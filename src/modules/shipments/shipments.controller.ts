@@ -16,6 +16,7 @@ import { ShipmentsService } from './shipments.service';
 import { Shipment } from './schemas/shipment.schema';
 import { CreateShipmentDTO } from './dto/create-shipment.dto';
 import { UpdateShipmentDTO } from './dto/update-shipment.dto';
+
 import { Roles } from '../users/user-roles.decorator';
 import { RoleGuard } from '../users/user-roles.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -140,6 +141,26 @@ export class ShipmentsController {
     } catch (error) {
       throw new HttpException(
         'Failed to update shipment',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Patch('api/shipments/:id/location')
+  async updateShipmentLocation(
+    @Param('id') id: string,
+    @Body() updateShipmentDto: UpdateShipmentDTO,
+  ): Promise<Shipment> {
+    try {
+      await this.shipmentService.publish({
+        id,
+        location: updateShipmentDto.location,
+      });
+      return await this.shipmentService.getById(id);
+      // return await this.shipmentService.update(id, updateShipmentDto);
+    } catch (error) {
+      throw new HttpException(
+        'Failed to update shipment location',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

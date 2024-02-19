@@ -4,11 +4,27 @@ import { Model } from 'mongoose';
 import { Shipment } from './schemas/shipment.schema';
 import { CreateShipmentDTO } from './dto/create-shipment.dto';
 import { UpdateShipmentDTO } from './dto/update-shipment.dto';
+
+import { Kafka, Producer } from 'kafkajs';
+
 @Injectable()
 export class ShipmentsService {
+  private readonly kafkaInstance: Kafka;
+  private producer: Producer;
   constructor(
-    @InjectModel(Shipment.name) private readonly shipmentModel: Model<Shipment>,
-  ) {}
+    @InjectModel(Shipment.name)
+    private readonly shipmentModel?: Model<Shipment>,
+  ) {
+    this.kafkaInstance = new Kafka({
+      clientId: 'SHIPMENT_TRACKER_CLIENT',
+      brokers: ['localhost:9092'],
+      connectionTimeout: 3000,
+      authenticationTimeout: 1000,
+      reauthenticationThreshold: 10000,
+    });
+
+    this.producer = this.kafkaInstance.producer();
+  }
 
   async create(createShipmentDto: CreateShipmentDTO): Promise<Shipment> {
     try {
@@ -54,5 +70,12 @@ export class ShipmentsService {
     } catch (error) {
       throw error;
     }
+  }
+  async publish(payload: object): Promise<void> {
+    await this.producer.connect();
+    await this.producer.send({
+      topic: 'test',
+      messages: [{ value: JSON.stringify(payload) }],
+    });
   }
 }
